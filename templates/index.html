@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI화재 종합 관리 센터</title>
+</head>
+<body>
+    <h1>CCTV화면</h1>
+    <img src="{{ url_for('video_feed1') }}" width="640" height="480" alt="video feed 1">
+    <img src="{{ url_for('video_feed2') }}" width="640" height="480" alt="video feed 2">
+    <br>
+    <button onclick="playSound()">화재경보</button>
+
+    <script>
+      function playSound() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+          }
+        };
+        xhttp.open("GET", "/play_sound", true);
+        xhttp.send();
+      }
+    </script>
+</body>
+</html>

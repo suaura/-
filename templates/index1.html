@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AI 화재 종합 관리 센터</title>
+    <style>
+
+    button {
+    font-weight: bold; background-color: gray;
+    border: none; color: white;
+    padding: 10px 40px; text-align: center;
+    text-decoration: none;display: inline-block;
+    font-size: 20px; margin: 4px 1px;cursor: pointer;}
+
+    #call119 {
+        font-weight: bold; background-color: gray;
+        border: none; color: yellow;
+        padding: 10px 40px; text-align: center;
+        text-decoration: none;display: inline-block;
+        font-size: 20px;margin: 4px 2px;cursor: pointer;}
+
+    </style>  <!버튼색>
+
+    <style>
+    body {background-color: black; }
+        p {
+}
+ #fire-alert {
+    background-color: gray;
+    color: white;
+    font-size: 40px;
+    padding: -1px;
+    </style> <!배경화면>
+
+    <style>img {  /* 선박이미지 */
+  width: 100px; /* 이미지 너비 */
+  height: 500px; /* 이미지 높이 */
+  position: absolute; /* 이미지 위치 설정 */
+  top: 95px; /* 이미지 상단 위치 */
+  left: 1100px; /* 이미지 왼쪽 위치 */
+}</style> <!선박이미지>
+
+    <style> #fi-image {position: absolute;top: 95px;left: 30px;width: 1040px;height: 500px;}
+
+    </style> <!cctv이미지>
+
+    <style>
+    /* 텍스트 크기를 20px로 설정 */
+    marquee {
+        font-size: 30px;
+    }
+</style> <!marquee 글자크기조절>
+
+    <style>
+      #siren {
+         position: absolute;
+         top: 500px;
+         left: 1100px;
+         width: 50px;
+         height: 50px;
+      }
+
+   </style> <!사이렌 크기 조절>
+</head>
+<body>
+   <div id="fire-alert">
+      &nbsp;&nbsp;<strong style="vertical-align: bottom;">AI 화재 종합 관리 센터</strong>
+    </div> <!제목 부분>
+
+  <div><img src="{{ url_for('static', filename='no.png') }}" alt= width="10px" />
+    <! 1번 도면>
+    <img id="fi-image" src="{{ url_for('video_feed', feed_type='camera', device=1) }}" />
+
+
+      <p style="background-color: black; color: white; padding: 10px;font-size: 20px; position: absolute; top: 580px; left: 1102px;">3층 도면</p>
+   </div> <!도면 및 cctv 번호 부분>
+
+   <p>
+     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <MARQUEE id="marquee" behavior = 'scroll' hspace="20" width="1040px" bgColor="gray" scrolldelay="61" loop="infinite" style="color:white" >AI 화재 종합 관리 센터</MARQUEE>
+</p> <! 기본 머큐리 부분>
+
+    <p>
+   <button id="siren-btn" onclick="toggleSiren()" style="width: 218px; height: 50px;
+    position: absolute; left: 140px; top: 700px; transform: translate(-50%, -50%);"><strong>○ 화재경보방송</strong></button>
+   <script>
+function toggleSiren() {
+                        const marquee = document.querySelector('marquee');
+                        marquee.textContent = '화재가 발생했습니다 신속히 조치하십시오. 화재가 발생했습니다 신속히 조치하십시오.';
+                        marquee.style.color = 'red';
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.open('POST', '/play_sound', true);
+                        xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xhttp.send('data=' + 'hello');
+                    }
+
+function resetSiren() {
+  const marquee = document.querySelector('marquee');
+  marquee.textContent = '비화재 입니다';
+  marquee.style.color = 'blue';
+  var xhttp = new XMLHttpRequest();
+  xhttp.open('POST', '/stop_sound', true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.send('data=' + 'stop');
+}
+
+
+</script><!화재경보방송+비화재상황 머큐리 상호작용>
+    </p><!화재 경보방송>
+
+  <p><!수동소화>
+    <button id="crew" onclick="toggleExtinguish()" style="width: 220px; height: 50px;
+    position: absolute; left: 370px; top: 700px; transform: translate(-50%, -50%); color: white;"><strong>○ 수동소화</strong></button>
+
+    <script>
+let extinguishState = false;
+const marquee = document.querySelector('#marquee');
+
+function toggleExtinguish() {
+  const extinguishButton = document.querySelector('#crew');
+  if (extinguishState) {
+    marquee.textContent = 'AI 화재 종합 관리 센터';
+    marquee.style.color = 'white';
+    extinguishButton.textContent = '○ 수동소화';
+    extinguishButton.style.color = 'white';
+  } else {
+    marquee.textContent = '소화 중';
+    marquee.style.color = 'blue';
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('POST', '/play_Sprinkler', true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.send('data=' + 'stop');
+    extinguishButton.textContent = '○ 소화중지';
+    extinguishButton.style.color = 'blue';
+
+  }
+  extinguishState = !extinguishState;
+}
+
+
+</script> <!수동소화 버튼 머큐리 상호작용>
+  </p><!수동소화>
+<script>
+      function call119() {
+        const marquee = document.querySelector('marquee');
+        marquee.textContent = '☎구조 신호 요청☎';
+        marquee.style.color = 'yellow';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+          }
+        };
+        xhttp.open("GET", "/call_119", true);
+        xhttp.send();
+      }
+</script>
+
+  <p>
+    <button id="call119" onclick="call119()" style="width: 220px; height: 50px;
+        position: absolute; left: 600px; top: 700px; transform: translate(-50%, -50%);">
+        ○ 구조 및 신고
+      </button>
+</p><!구조요청>
+
+  <p>
+    <button id="no_fire" onclick="resetSiren()" style="width: 220px; height: 50px;
+    position: absolute; left: 958px; top: 700px; transform: translate(-50%, -50%);">○ 비화재 상황</button>
+</p> <!비화재 상황>
+
+
+  <p>
+    <button id="danger" onclick="danger()" style="width: 235px; height: 50px;
+    position: absolute; left: 960px; top: 30px; transform: translate(-50%, -50%);">화재 위험도 분석</button>
+
+    <script>
+    function danger() {
+    window.open("팝업 창 URL", "팝업 창 이름", "창 속성");    }
+</script>
+  </p> <!화재 위험도 분석>
+
+  <p>
+   <button id="manual" onclick="manual()" style="width: 190px; height: 50px;
+    position: absolute; left: 1140px; top: 30px; transform: translate(-50%, -50%);">사용 메뉴얼</button>
+
+    <script>
+    function manual() {
+    window.open("팝업 창 URL", "팝업 창 이름", "창 속성");
+    }
+    </script>
+</p>
+</body>
+</html>
